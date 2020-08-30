@@ -45,11 +45,11 @@ class Board
     end
     print "X\n"
 
-    @board.each do |column|
+    (0...size[1]).each do |j|
       print "X"
-      column.each do |element|
-        if element then
-          print element.symbol
+      (0...size[0]).each do |i|
+        if @board[i][j] then
+          print @board[i][j].symbol(i, j)
         else
           print "*"
         end

@@ -2,6 +2,7 @@
 
 require "./app/board.rb"
 require "./app/food.rb"
+require "./app/random_snake.rb"
 require "./app/snake.rb"
 
 class Battlesnake
@@ -11,8 +12,8 @@ class Battlesnake
   end
 
   def initialize
-    @board = Board.new [10, 10]
-    @snakes = [Snake.new(@board, "A"), Snake.new(@board, "B")]
+    @board = Board.new [12, 8]
+    @snakes = [Snake.new(@board, "A"), RandomSnake.new(@board, "R")]
     @snakes.each_index do |i|
       Food.spawn_food(@board)
     end

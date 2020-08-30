@@ -2,11 +2,10 @@ class Snake
   STARTING_LENGTH = 3
 
   attr_reader :status
-  attr_reader :symbol
 
   def initialize(board, symbol)
     @board = board
-    @symbol = symbol
+    @default_symbol = symbol
     @status = :alive
     @health = 100
 
@@ -15,28 +14,51 @@ class Snake
       starting_coordinates
     end
     board[starting_coordinates[0]][starting_coordinates[1]] = self
-    set_move([:left, :right, :up, :down].sample)
+    @last_move = [:left, :right, :up, :down].sample
   end
 
-  def set_move(direction)
-    @next_direction = direction
+  def symbol(x, y)
+    if x == @body[0][0] and y == @body[0][1]
+      case @last_move
+      when :left
+        "<"
+      when :right
+        ">"
+      when :up
+        "^"
+      when :down
+        "v"
+      end
+    else
+      @default_symbol
+    end
+  end
+
+  def choose_move()
+    @last_move
   end
 
   def move!
     current = @body[0]
-    case @next_direction
+    @last_move = choose_move()
+    case @last_move
     when :left
       next_move = [current[0] - 1, current[1]]
     when :right
       next_move = [current[0] + 1, current[1]]
     when :up
-      next_move = [current[0], current[1] + 1]
-    when :down
       next_move = [current[0], current[1] - 1]
+    when :down
+      next_move = [current[0], current[1] + 1]
     end
 
     if next_move[0] < 0 or next_move[0] >= @board.size[0] or
        next_move[1] < 0 or next_move[1] >= @board.size[1] then
+      die!
+      return
+    end
+
+    if @board[next_move[0]][next_move[1]] == self
       die!
       return
     end

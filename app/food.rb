@@ -24,7 +24,7 @@ class Food
     end
   end
 
-  def symbol
+  def symbol(x, y)
     "O"
   end
 end

@@ -41,6 +41,8 @@ class Snake
       return
     end
 
+    ate_food = @board[next_move[0]][next_move[1]].is_a? Food
+
     @body.each do |piece|
       @board[piece[0]][piece[1]] = nil
     end
@@ -55,6 +57,17 @@ class Snake
 
     @body.each do |piece|
       @board[piece[0]][piece[1]] = self
+    end
+
+    if ate_food then
+      @health = 100
+      @body << @body[0].clone
+    else
+      @health -= 1
+      if @health <= 0 then
+        die!
+        return
+      end
     end
   end
 

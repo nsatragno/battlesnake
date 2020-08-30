@@ -13,23 +13,39 @@ class Board
     @board.each_index &block
   end
 
+  def remove!(removed_element)
+    @board.each do |row|
+      row.map! do |element|
+        if element == removed_element
+          nil
+        else
+          element
+        end
+      end
+    end
+  end
+
   def [](x)
     @board[x]
+  end
+
+  def size
+    [@board.length, @board[0].length]
   end
 
   def print!
     # Print the top edge
     print "X"
-    @board.each_index do |i|
+    @board.each do |i|
       print "X"
     end
     print "X\n"
 
-    @board.each_index do |i|
+    @board.each do |column|
       print "X"
-      @board[i].each_index do |j|
-        if @board[i][j] then
-          print @board[i][j].symbol
+      column.each do |element|
+        if element then
+          print element.symbol
         else
           print "*"
         end
@@ -39,7 +55,7 @@ class Board
 
     # Print the bottom edge
     print "X"
-    @board.each_index do |i|
+    @board.each do |i|
       print "X"
     end
     print "X\n"

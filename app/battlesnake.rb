@@ -12,8 +12,12 @@ class Battlesnake
   end
 
   def initialize
-    @board = Board.new [12, 8]
-    @snakes = [Snake.new(@board, "A"), RandomSnake.new(@board, "R")]
+    @board = Board.new [20, 20]
+    @snakes = [
+      RandomSnake.new(@board, "A"), RandomSnake.new(@board, "B"),
+      RandomSnake.new(@board, "C"), RandomSnake.new(@board, "D"),
+      RandomSnake.new(@board, "E"), RandomSnake.new(@board, "F"),
+    ]
     @snakes.each_index do |i|
       Food.spawn_food(@board)
     end
@@ -23,12 +27,22 @@ class Battlesnake
     while true
       system("clear")
       @board.print!
+      @snakes.each do |snake|
+        snake.choose_move!
+      end
+
       @snakes.select! do |snake|
         snake.move!
-        snake.status != :dead
+
+        if snake.status == :dead
+          @board.remove! snake
+          false
+        else
+          true
+        end
       end
       Food.maybe_spawn_food(@board)
-      sleep 0.5
+      sleep 0.1
     end
   end
 

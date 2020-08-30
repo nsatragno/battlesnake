@@ -14,12 +14,12 @@ class Snake
       starting_coordinates
     end
     board[starting_coordinates[0]][starting_coordinates[1]] = self
-    @last_move = [:left, :right, :up, :down].sample
+    @next_move = [:left, :right, :up, :down].sample
   end
 
   def symbol(x, y)
-    if x == @body[0][0] and y == @body[0][1]
-      case @last_move
+    if x == head[0] and y == head[1]
+      case @next_move
       when :left
         "<"
       when :right
@@ -35,30 +35,63 @@ class Snake
   end
 
   def choose_move()
-    @last_move
+    @next_move
+  end
+
+  def head
+    @body[0]
+  end
+
+  def size
+    @body.length
+  end
+
+  def next_for(direction)
+    case direction
+    when :left
+      [head[0] - 1, head[1]]
+    when :right
+      [head[0] + 1, head[1]]
+    when :up
+      [head[0], head[1] + 1]
+    when :down
+      [head[0], head[1] - 1]
+    end
+  end
+
+  def maybe_kill?(next_move)
+    if next_move[0] < 0 or next_move[0] >= @board.size[0] or
+       next_move[1] < 0 or next_move[1] >= @board.size[1] or
+       @board[next_move[0]][next_move[1]] == self
+      # Special case the tail
+      if next_move != @body[@body.length - 1]
+        return true
+      end
+    end
+
+    if @board[next_move[0]][next_move[1]].is_a? Snake and
+       @board[next_move[0]][next_move[1]] != self
+      other_snake = @board[next_move[0]][next_move[1]]
+
+      if other_snake.head == [next_move[0], next_move[1]] then
+        # We collided head on. The bigger snake wins.
+        # If they're equal, they both die.
+        if other_snake.size <= self.size then
+          other_snake.die!
+        end
+
+        return size <= other_snake.size
+      else
+        # We collided with the tail of the other snake.
+        return true
+      end
+    end
   end
 
   def move!
-    current = @body[0]
-    @last_move = choose_move()
-    case @last_move
-    when :left
-      next_move = [current[0] - 1, current[1]]
-    when :right
-      next_move = [current[0] + 1, current[1]]
-    when :up
-      next_move = [current[0], current[1] + 1]
-    when :down
-      next_move = [current[0], current[1] - 1]
-    end
+    next_move = next_for @next_move
 
-    if next_move[0] < 0 or next_move[0] >= @board.size[0] or
-       next_move[1] < 0 or next_move[1] >= @board.size[1] then
-      die!
-      return
-    end
-
-    if @board[next_move[0]][next_move[1]] == self
+    if maybe_kill?(next_move) then
       die!
       return
     end
@@ -83,7 +116,7 @@ class Snake
 
     if ate_food then
       @health = 100
-      @body << @body[0].clone
+      @body << head.clone
     else
       @health -= 1
       if @health <= 0 then
@@ -95,6 +128,5 @@ class Snake
 
   def die!
     @status = :dead
-    @board.remove! self
   end
 end

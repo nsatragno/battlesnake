@@ -5,6 +5,11 @@ require "./app/food.rb"
 require "./app/snake.rb"
 
 class Battlesnake
+  @@random = Random.new
+  def self.random
+    @@random
+  end
+
   def initialize
     @board = Board.new [10, 10]
     @snakes = [Snake.new(@board, "A"), Snake.new(@board, "B")]
@@ -21,6 +26,7 @@ class Battlesnake
         snake.move!
         snake.status != :dead
       end
+      Food.maybe_spawn_food(@board)
       sleep 0.5
     end
   end

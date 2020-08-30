@@ -29,6 +29,10 @@ class Board
     @board[x]
   end
 
+  def any?(&block)
+    @board.any? &block
+  end
+
   def size
     [@board.length, @board[0].length]
   end

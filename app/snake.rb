@@ -47,9 +47,9 @@ class Snake
     when :right
       next_move = [current[0] + 1, current[1]]
     when :up
-      next_move = [current[0], current[1] - 1]
-    when :down
       next_move = [current[0], current[1] + 1]
+    when :down
+      next_move = [current[0], current[1] - 1]
     end
 
     if next_move[0] < 0 or next_move[0] >= @board.size[0] or

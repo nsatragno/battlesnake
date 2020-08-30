@@ -45,9 +45,9 @@ class Board
     end
     print "X\n"
 
-    (0...size[1]).each do |j|
+    (size[1] - 1).downto(0).each do |j|
       print "X"
-      (0...size[0]).each do |i|
+      0.upto(size[0] - 1).each do |i|
         if @board[i][j] then
           print @board[i][j].symbol(i, j)
         else

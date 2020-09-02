@@ -1,2 +1,2 @@
-language = "ruby"
+language = "sinatra"
 run = "bundle install && bundle exec ./server.rb"

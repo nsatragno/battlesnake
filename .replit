@@ -1,0 +1,2 @@
+language = "ruby"
+run = "bundle install && bundle exec ./server.rb"

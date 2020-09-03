@@ -6,6 +6,8 @@ class Snake
   attr_reader :id
   attr_reader :status
   attr_accessor :default_symbol
+  attr_accessor :next_move
+  attr_accessor :health
 
   def initialize(board, symbol, json = nil)
     @board = board
@@ -45,6 +47,8 @@ class Snake
         "^"
       when :down
         "v"
+      when :none
+        "x"
       end
     else
       @default_symbol
@@ -74,6 +78,8 @@ class Snake
       [head[0], head[1] + 1]
     when :down
       [head[0], head[1] - 1]
+    when :none
+      [head[0], head[1]]
     end
   end
 
@@ -146,5 +152,18 @@ class Snake
 
   def die!
     @status = :dead
+  end
+
+  def clone(board)
+    hash = {}
+    hash["health"] = @health
+    hash["body"] = @body.map do |piece|
+      body_hash = {}
+      body_hash["x"] = piece[0]
+      body_hash["y"] = piece[1]
+      body_hash
+    end
+    hash["id"] = @id
+    Snake.new(board, @default_symbol, hash)
   end
 end

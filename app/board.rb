@@ -1,6 +1,8 @@
 # Game board.
 class Board
 
+  attr_accessor :board
+
   # |size|: array with [rows, columns]
   def initialize(size)
     @board = Array.new(size[0])
@@ -11,6 +13,18 @@ class Board
 
   def each_index(&block)
     @board.each_index &block
+  end
+
+  def clone
+    other = Board.new(size)
+    other.board.each_index do |i|
+      other.board.each_index do |j|
+        if @board[i][j].is_a? Food then
+          other.board[i][j] = Food.new
+        end
+      end
+    end
+    other
   end
 
   def remove!(removed_element)
@@ -35,6 +49,10 @@ class Board
 
   def size
     [@board.length, @board[0].length]
+  end
+
+  def flatten
+    @board.flatten
   end
 
   def print!

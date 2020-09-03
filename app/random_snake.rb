@@ -21,4 +21,17 @@ class RandomSnake < Snake
     next_move[1] < 0 or next_move[1] >= @board.size[1] or
     @board[next_move[0]][next_move[1]].is_a? Snake
   end
+
+  def clone(board)
+    hash = {}
+    hash["health"] = @health
+    hash["body"] = @body.map do |piece|
+      body_hash = {}
+      body_hash["x"] = piece[0]
+      body_hash["y"] = piece[1]
+      body_hash
+    end
+    hash["id"] = @id
+    RandomSnake.new(board, @default_symbol, hash)
+  end
 end

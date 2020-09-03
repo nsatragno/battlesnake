@@ -3,17 +3,28 @@ class Snake
 
   attr_reader :status
 
-  def initialize(board, symbol)
+  def initialize(board, symbol, json = nil)
     @board = board
     @default_symbol = symbol
     @status = :alive
-    @health = 100
 
-    starting_coordinates = board.unoccupied_spaces.sample
-    @body = (0...STARTING_LENGTH).map do |i|
-      starting_coordinates
+    if json then
+      @health = json["health"]
+      @body = json["body"].map do |coordinates|
+        [coordinates["x"], coordinates["y"]]
+      end
+      starting_coordinates = @body[0]
+    else
+      @health = 100
+      starting_coordinates = board.unoccupied_spaces.sample
+      @body = (0...STARTING_LENGTH).map do |i|
+        starting_coordinates
+      end
     end
-    board[starting_coordinates[0]][starting_coordinates[1]] = self
+
+    @body.each do |part|
+      board[part[0]][part[1]] = self
+    end
     @next_move = [:left, :right, :up, :down].sample
   end
 

@@ -35,6 +35,12 @@ options "/start" do
 end
 
 post "/move" do
+  game = Battlesnake.new JSON.parse(request.body.read)
+
+  puts "Receiving move"
+  puts "Board status:"
+  game.board.print!
+
   {
     move: "up",
   }.to_json

@@ -7,11 +7,26 @@ require "./app/snake.rb"
 
 class Battlesnake
   @@random = Random.new
+
+  attr_reader :board
+
   def self.random
     @@random
   end
 
-  def initialize
+  def initialize(json = nil)
+    if json then
+      @board = Board.new [json["board"]["width"], json["board"]["height"]]
+      @snakes = json["board"]["snakes"].map do |snake_json|
+        Snake.new @board, "E", snake_json
+      end
+      json["board"]["food"].each do |food_json|
+        @board[food_json["x"]][food_json["y"]] = Food.new
+      end
+      return
+    end
+
+    # default initialization
     @board = Board.new [20, 20]
     @snakes = [
       RandomSnake.new(@board, "A"), RandomSnake.new(@board, "B"),

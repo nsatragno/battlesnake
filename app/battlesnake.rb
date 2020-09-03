@@ -2,6 +2,7 @@
 
 require "./app/board.rb"
 require "./app/food.rb"
+require "./app/ai_snake.rb"
 require "./app/random_snake.rb"
 require "./app/snake.rb"
 
@@ -19,7 +20,7 @@ class Battlesnake
     if json then
       @board = Board.new [json["board"]["width"], json["board"]["height"]]
       @snakes = json["board"]["snakes"].map do |snake_json|
-        RandomSnake.new @board, "E", snake_json
+        AiSnake.new self, @board, "E", snake_json
       end
       json["board"]["food"].each do |food_json|
         @board[food_json["x"]][food_json["y"]] = Food.new

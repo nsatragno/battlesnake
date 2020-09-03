@@ -9,6 +9,7 @@ class Battlesnake
   @@random = Random.new
 
   attr_reader :board
+  attr_reader :snakes
 
   def self.random
     @@random
@@ -18,7 +19,7 @@ class Battlesnake
     if json then
       @board = Board.new [json["board"]["width"], json["board"]["height"]]
       @snakes = json["board"]["snakes"].map do |snake_json|
-        Snake.new @board, "E", snake_json
+        RandomSnake.new @board, "E", snake_json
       end
       json["board"]["food"].each do |food_json|
         @board[food_json["x"]][food_json["y"]] = Food.new

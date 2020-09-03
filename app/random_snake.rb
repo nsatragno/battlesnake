@@ -5,9 +5,10 @@ class RandomSnake < Snake
     available_moves = [:left, :right, :up, :down]
     while not available_moves.empty?
       @next_move = available_moves.sample
-      return unless will_probably_die?(next_for(@next_move))
+      return @next_move unless will_probably_die?(next_for(@next_move))
       available_moves.delete(@next_move)
     end
+    @next_move
   end
 
   def will_probably_die?(next_move)

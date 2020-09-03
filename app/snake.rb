@@ -1,7 +1,11 @@
+require "securerandom"
+
 class Snake
   STARTING_LENGTH = 3
 
+  attr_reader :id
   attr_reader :status
+  attr_accessor :default_symbol
 
   def initialize(board, symbol, json = nil)
     @board = board
@@ -14,12 +18,14 @@ class Snake
         [coordinates["x"], coordinates["y"]]
       end
       starting_coordinates = @body[0]
+      @id = json["id"]
     else
       @health = 100
       starting_coordinates = board.unoccupied_spaces.sample
       @body = (0...STARTING_LENGTH).map do |i|
         starting_coordinates
       end
+      @id = SecureRandom.uuid
     end
 
     @body.each do |part|
@@ -45,7 +51,8 @@ class Snake
     end
   end
 
-  def choose_move()
+  def choose_move!
+    # overloaded by children
     @next_move
   end
 

@@ -18,7 +18,7 @@ class AiSnake < Snake
     }
 
     add_level(tree_head, 0)
-    @next_move = find_best_path(tree_head)[:move]
+    @next_move = find_best_path(tree_head)[:move] or :up
   end
 
   def add_level(node, current_depth)

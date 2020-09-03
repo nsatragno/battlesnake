@@ -85,12 +85,17 @@ class Snake
 
   def maybe_kill?(next_move)
     if next_move[0] < 0 or next_move[0] >= @board.size[0] or
-       next_move[1] < 0 or next_move[1] >= @board.size[1] or
-       @board[next_move[0]][next_move[1]] == self
+       next_move[1] < 0 or next_move[1] >= @board.size[1]
+      return true
+    end
+
+    @board[next_move[0]][next_move[1]] == self
+    @body.each_with_index do |piece, i|
       # Special case the tail
-      if next_move != @body[@body.length - 1]
-        return true
+      if i == @body.length - 1
+        next
       end
+      return true if next_move == piece
     end
 
     if @board[next_move[0]][next_move[1]].is_a? Snake and
